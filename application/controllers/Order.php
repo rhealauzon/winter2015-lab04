@@ -57,13 +57,29 @@ class Order extends Application {
         $this->data['drinks'] = $this->make_column('d');
         $this->data['sweets'] = $this->make_column('s');
 
+        foreach($this->data['sweets'] as &$item)
+        {
+            $item->order_num = $order_num;
+        }
+        
+        foreach($this->data['drinks'] as &$item)
+        {
+            $item->order_num = $order_num;
+        }
+        
+        foreach($this->data['meals'] as &$item)
+        {
+            $item->order_num = $order_num;
+        }
+
         $this->render();
     }
 
     // make a menu ordering column
     function make_column($category)
     {
-        $items = $this->menu->some('category', $category);        
+        $items = $this->menu->some('category', $category);
+
         return $items;
     }
 
@@ -71,7 +87,7 @@ class Order extends Application {
     function add($order_num, $item) {
         
         //add the item to the order
-        $order = $this->orders->add_item($order_num, $item);
+        $this->orders->add_item($order_num, $item);
         
         
         redirect('/order/display_menu/' . $order_num);
@@ -87,6 +103,8 @@ class Order extends Application {
         $order = $this->orders->get($order_num);
         
         $this->data['total'] = "$" . $this->orders->total($order_num);
+        
+        
 
         $this->render();
     }

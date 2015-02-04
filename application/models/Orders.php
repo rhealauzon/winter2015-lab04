@@ -24,9 +24,10 @@ class Orders extends MY_Model {
         //get the items on the order
         //
         //if it already exists just increment
-        if ( $item = $this->orderitems->get($num, $code))
+        if ( ($item = $this->orderitems->get($num, $code))  != null )
         {
-            $this->orderitems->update($item->quantity++);
+            $item->quantity += 1;
+            $this->orderitems->update($item);
         }
         //create a new one if it does not
         else
@@ -35,7 +36,7 @@ class Orders extends MY_Model {
             $item->quantity = 1;
             $item->order = $num;
             $item->item = $code;
-            $this->orderitems->add(item);
+            $this->orderitems->add($item);
         }
 
         
