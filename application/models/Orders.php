@@ -10,26 +10,45 @@ class Orders extends MY_Model {
     // constructor
     function __construct() {
         parent::__construct('orders', 'num');
+        
+        //load the models
+        $CI = &get_instance();
+        $CI->load->model('orderitems');
+        $CI->load->model('menu');
     }
 
     // add an item to an order
     function add_item($num, $code) 
     {
         
+        //get the items on the order
+        //
+        //if it already exists just increment
+        if ( $item = $this->orderitems->get($num, $code))
+        {
+            $this->orderitems->update($item->quantity++);
+        }
+        //create a new one if it does not
+        else
+        {
+            $item = $this->orderitems->create();
+            $item->quantity = 1;
+            $item->order = $num;
+            $item->item = $code;
+            $this->orderitems->add(item);
+        }
+
+        
     }
 
     // calculate the total for an order
     function total($num)
     {        
-        //retrieve the order
-        $CI = &get_instance();
-        $CI->load->model('orderitems');
-        $CI->load->model('menu');
         
         //get the order
         $orderItems = $this->orderitems->some('order', $num);
         
-        $total;
+        $total = 0.0;
         //calculate the total some
         foreach( $orderItems as $item )
         {

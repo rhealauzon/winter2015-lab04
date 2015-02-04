@@ -48,7 +48,7 @@ class Order extends Application {
         //Retrieve the order data
         $order = $this->orders->get($order_num);       
 
-        $this->data['title'] = $order_num;
+        $this->data['title'] = $order_num . " ($" . $this->orders->total($order_num) . ")";
         
         
         
@@ -69,7 +69,11 @@ class Order extends Application {
 
     // add an item to an order
     function add($order_num, $item) {
-        //FIXME
+        
+        //add the item to the order
+        $order = $this->orders->add_item($order_num, $item);
+        
+        
         redirect('/order/display_menu/' . $order_num);
     }
 
@@ -78,7 +82,11 @@ class Order extends Application {
         $this->data['title'] = 'Checking Out';
         $this->data['pagebody'] = 'show_order';
         $this->data['order_num'] = $order_num;
-        //FIXME
+        
+        // retrieve the order
+        $order = $this->orders->get($order_num);
+        
+        $this->data['total'] = "$" . $this->orders->total($order_num);
 
         $this->render();
     }
