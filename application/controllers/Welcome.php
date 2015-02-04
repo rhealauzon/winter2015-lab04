@@ -24,11 +24,12 @@ class Welcome extends Application {
         $this->data['pagebody'] = 'welcome';
 
         // Get all the completed orders
-        //FIXME
-
+        $completed = $this->orders->some('status', 'c');
+        
         // Build a multi-dimensional array for reporting
         $orders = array();
-        foreach ($completed as $order) {
+        foreach ($completed as $order) 
+        {
             $this1 = array(
                 'num' => $order->num,
                 'datetime' => $order->date,
