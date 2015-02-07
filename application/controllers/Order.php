@@ -115,7 +115,7 @@ class Order extends Application {
         
         //validate the items before render
         
-        $this->data['okornot'] = $this->orders->validate($order_num);
+        $this->data['okornot'] = $this->orders->validate($order_num) ? '' : 'disabled';
         $this->render();
     }
 
